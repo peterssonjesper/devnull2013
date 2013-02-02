@@ -1,21 +1,39 @@
 var Drone = function() {
 	
-	this.releaseAgain = function(ship, droneIndex){
-		if(ship.drones === undefined || droneIndex > ship.drones.length){
+	this.releaseAgain = function(ship, droneIndex, callback) {
+		console.log(droneIndex);
+		if(ship.ship_data.drones === undefined || droneIndex > ship.ship_data.drones.length-1) {
 			return;
 		}
-		var droneReleased = false;
-		var drone = ship.drones[droneIndex];
-		$.post("/release_drone", {x: ship.system_x, y: ship.system_x, drone_id: drone.droneid}, function(data){
-			if(!data.isReleased) {
-				droneReleased = true;
+		var drone = ship.ship_data.drones[droneIndex];
+		var self = this;
+		$.ajax({
+			url : "/release_drone",
+			data: JSON.stringify({
+				x: ship.ship_data.systemx, y : ship.ship_data.systemy, drone_id: drone.droneid
+			}),
+			type : "POST",
+			dataType : "json",
+			contentType : 'application/json; charset=utf-8',
+			success : function(data) {
+				console.log(data);
+				if(data.isReleased) {
+					callback(data.droneID);
+				}
+				else {
+					self.releaseAgain(ship, droneIndex+1, callback);
+				}
 			}
-			else {
-				this.release(ship, droneIndex+1);
-			}
-		}, "json");
+		});
 	}; 
-	this.release = function(ship) {
-		this.releaseAgain(ship, 0);
+
+	this.release = function(ship, callback) {
+		this.releaseAgain(ship, 0, callback);
+	};
+
+	this.scan = function(droneID, callback){
+		$.post("drone_scan", JSON.stringify({drone_id: droneID}), function(data) {
+			callback(data);
+		}, "json");
 	};
 };

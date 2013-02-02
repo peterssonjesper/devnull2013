@@ -117,6 +117,7 @@ get "/visited_planets" do
 end
 
 post "/release_drone" do
+	data = JSON.parse request.body.read
 	x = data["x"].to_i
 	y = data["y"].to_i
 	drone_id = data["drone_id"]
@@ -124,7 +125,7 @@ post "/release_drone" do
 	did_release = false
 	planets.each do |planet|
 		planet = JSON.parse(r.get planet)
-		if planet["anomalies"]
+		if planet["anomalies"] and planet["x"] == x and planet["y"] == y
 			anomaly = planet["anomalies"].first
 			uri = Addressable::URI.new
 			uri.query_values = {
@@ -134,8 +135,10 @@ post "/release_drone" do
 				:arg2 => anomaly,
 				:arg3 => drone_id
 			}
-			response = HTTParty.get("#{URL}?#{uri.query}")
-			did_release = true
+			response = JSON.parse HTTParty.get("#{URL}?#{uri.query}").body
+			if response["success"] 
+				did_release = true
+			end
 			puts response.inspect
 			break
 		end
@@ -147,6 +150,7 @@ post "/release_drone" do
 end
 
 post "/drone_scan" do
+	data = JSON.parse request.body.read
 	drone_id = data["drone_id"]
 	uri = Addressable::URI.new
 	uri.query_values = {
