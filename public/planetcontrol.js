@@ -28,7 +28,7 @@ var PlanetControl = function() {
 		}
 		var planet = this.planets[this.current_index];
 		this.$content.html('');
-		if(planet.density) {
+		if(planet !== undefined && planet.density) {
 			this.$content.append(_.template($('#extendedPlanet').html(), planet));
 		}
 		else if(planet.day){
