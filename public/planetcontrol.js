@@ -6,12 +6,9 @@ var PlanetControl = function() {
 			var $planet = $(this);
 			var index = $(this).data('index');
 			var planet = self.planets[index];
-			$content.html("<h1>" + planet.planet_no + "</h1>");
 			if(planet.day) {
-				$content.append("<table>");
-				$content.append("<tr><td>Day</td><td>" + planet.day + "</td><tr>");
-				$content.append("<tr><td>Radius</td><td>" + planet.radius + "</td><tr>");
-				$content.append("</table>");
+				console.log(planet);
+				$content.append(_.template($('#currentPlanet').html(), planet));
 			}
 			$.ajax({
 				url : '/set_in_system_direction',
