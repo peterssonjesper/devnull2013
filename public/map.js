@@ -1,4 +1,6 @@
-var Map = function() {
+var Map = function($canvas) {
+
+	this.context = $canvas[0].getContext('2d');
 
 	this.getMap = function(callback) {
 		$.ajax({
@@ -9,8 +11,7 @@ var Map = function() {
 			callback(stars);
 		});
 	};
-	this.print = function(stars, $canvas, $table) {
-		this.context = $canvas[0].getContext('2d');
+	this.print = function(stars, $table) {
 		for(var i in stars) {
 			var star = stars[i];
 			this.printSingle(star.x, star.y, "yellow");
@@ -23,6 +24,10 @@ var Map = function() {
 		this.context.arc(x, y, 3, 0, 2*Math.PI, false);
 		this.context.fillStyle = color;
 		this.context.fill();
+	},
+
+	this.clear = function() {
+		this.context.clearRect(0, 0, 200, 200);
 	}
 
 };

@@ -1,14 +1,13 @@
-var map = new Map();
+var map = new Map($("#map"));
 var mapcontrol = new MapControl();
 var ship = new Ship(map);
-var updateInterval = 10000;
+var updateInterval = 500;
 
 map.getMap(function(stars) {
-	map.print(stars, $("#map"), $("table"));
-	mapcontrol.init($("#table"));
-
+	mapcontrol.init($("table"));
 	setInterval(function() {
+		map.clear();
+		map.print(stars, $("table"));
 		ship.print_on_map();
 	}, updateInterval);
-	ship.print_on_map();
 });

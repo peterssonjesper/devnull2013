@@ -1,10 +1,21 @@
 var MapControl = function(){
 	this.init = function($table){
-		$table.find('.name').click(function(){
+		$table.on("click", ".name", function(){
 			var $star = $(this).parent();
-			$.post('/set_direction', {name: $(this).html()}, function(data){
-				$star.css('background', '#999');
-			}, 'json');
+			console.log($(this).html());
+			$.ajax({
+				url : '/set_direction',
+				type : 'POST',
+				data: JSON.stringify({
+					name: $(this).html()
+				}),
+				dataType : 'json',
+				contentType : 'application/json; charset=utf-8',
+				success : function(data) {
+					$table.find(".selected").removeClass("selected");
+					$star.addClass("selected");
+				}
+			});
 		});
 	};
 };

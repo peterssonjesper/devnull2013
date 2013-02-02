@@ -4,7 +4,13 @@ body {
 #map {
 	background-color: black;
 }
+table {
+	border-collapse: collapse;
+}
 table th, table td{
 	text-align: left;
 	padding: 5px;
+}
+.selected {
+	background-color: #ccc;
 }
