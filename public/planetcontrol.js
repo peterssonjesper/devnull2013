@@ -7,7 +7,7 @@ var PlanetControl = function() {
 			var index = $(this).data('index');
 			var planet = self.planets[index];
 			if(planet.day) {
-				console.log(planet);
+				$content.html('');
 				$content.append(_.template($('#currentPlanet').html(), planet));
 			}
 			$.ajax({

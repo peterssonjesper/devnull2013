@@ -10,7 +10,7 @@ var planetcontrol = new PlanetControl();
 var ship = new Ship(starMap, planetMap);
 var updateInterval = 500;
 
-starMap.getMap("/stars", function(stars) {
+starMap.getMap("/stars", {},function(stars) {
 	// Prints stars table
 	starTable.print(stars);
 
@@ -24,7 +24,7 @@ starMap.getMap("/stars", function(stars) {
 });
 
 setInterval(function() {
-	planetMap.getMap("/planets", function(planets) {
+	planetMap.getMap("/planets", {x: ship.system_x, y: ship.system_y},function(planets) {
 		planetcontrol.setPlanets(planets);
 
 		// Print planets on planet map
