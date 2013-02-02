@@ -36,7 +36,16 @@ post "/set_direction" do
 		:arg2 => name
 	}
 
-	puts uri.query
 	response = HTTParty.get("#{URL}?#{uri.query}")
 	{"msg" => "ok"}.to_json
+end
+
+get "/planets" do
+	response = HTTParty.get("#{URL}?session=#{API_KEY}&command=shortrange")
+	system_data = JSON.parse(response.body)
+	begin
+		system_data["system"]["planetarray"].to_json
+	rescue
+		[].to_json
+	end
 end

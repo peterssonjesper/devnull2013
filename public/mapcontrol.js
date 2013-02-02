@@ -2,7 +2,6 @@ var MapControl = function(){
 	this.init = function($table){
 		$table.on("click", ".name", function(){
 			var $star = $(this).parent();
-			console.log($(this).html());
 			$.ajax({
 				url : '/set_direction',
 				type : 'POST',
