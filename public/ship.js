@@ -1,5 +1,17 @@
-var Ship = function() {
+var Ship = function(map) {
+	this.map = map;
 	this.get_position = function(callback) {
-		callback({x : 10, y : 10});
+		$.ajax({
+			url: "/ship_position",
+			dataType : "json",
+		}).done(function(data) {
+			callback(data);
+		});
 	};
+
+	this.print_on_map = function() {
+		ship.get_position(function(position) {
+			this.map.printSingle(position.x, position.y, "red");
+		});
+	}
 };

@@ -1,7 +1,6 @@
 var Map = function() {
 
 	this.getMap = function(callback) {
-
 		$.ajax({
 			url: "/stars",
 			dataType : "json",

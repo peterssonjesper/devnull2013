@@ -16,5 +16,16 @@ end
 
 get "/ship_position" do
 	response = HTTParty.get("#{URL}?session=#{API_KEY}&command=ship&arg=show")
-	response.body
+	ship = JSON.parse(response.body)
+	{
+		:x => ship["unix"],
+		:y => ship["uniy"]
+	}.to_json
+end
+
+post "/set_direction" do
+	data = JSON.parse request.body.read
+	name = data["name"]
+	response = HTTParty.get("#{URL}?session=#{API_KEY}&command=ship&arg=setunidest&arg2=#{name}")
+	{"msg" => "ok"}.to_json
 end
