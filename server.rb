@@ -21,7 +21,9 @@ get "/ship_position" do
 	ship = JSON.parse(response.body)
 	{
 		:x => ship["unix"],
-		:y => ship["uniy"]
+		:y => ship["uniy"],
+		:system_x => ship["systemx"],
+		:system_y => ship["systemy"]
 	}.to_json
 end
 
@@ -34,6 +36,22 @@ post "/set_direction" do
 		:session => API_KEY,
 		:command => "ship",
 		:arg => "setunidest",
+		:arg2 => name
+	}
+
+	response = HTTParty.get("#{URL}?#{uri.query}")
+	{"msg" => "ok"}.to_json
+end
+
+post "/set_in_system_direction" do
+	data = JSON.parse request.body.read
+	name = data["name"]
+
+	uri = Addressable::URI.new
+	uri.query_values = {
+		:session => API_KEY,
+		:command => "ship",
+		:arg => "setsystemdest",
 		:arg2 => name
 	}
 

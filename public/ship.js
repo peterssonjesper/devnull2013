@@ -1,5 +1,7 @@
-var Ship = function(map) {
-	this.map = map;
+var Ship = function(starMap, planetMap) {
+	this.starMap = starMap;
+	this.planetMap = planetMap;
+
 	this.get_position = function(callback) {
 		$.ajax({
 			url: "/ship_position",
@@ -12,7 +14,8 @@ var Ship = function(map) {
 	this.print_on_map = function() {
 		var self = this;
 		ship.get_position(function(position) {
-			self.map.printAtom(position.x, position.y, "red");
+			self.starMap.printAtom(position.x, position.y, "red");
+			self.planetMap.printAtom(position.system_x, position.system_y, "red");
 		});
 	}
 };
