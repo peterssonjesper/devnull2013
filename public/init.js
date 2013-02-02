@@ -43,14 +43,14 @@ setInterval(function() {
 
 $.get('/visited_planets', function(data){
 	var db = $('#planetDataBase')
-	data.each(function(){
+	$.each(data, function(){
 		db.find('select').append('<option value="' + this + '">' + this + '</option>');
 	});
 
 	db.find('select').on('change', function(){
 		$.get('/visited_planets/'+encodeURI($(this).val()), function(data){
-			data = db.find('.data');
-			data.html('').append(_.template($('extendedPlanet').html(), data));
+			dataContent = db.find('.data');
+			dataContent.html('').append(_.template($('#extendedPlanet').html(), data));
 		}, 'json');
 	});
 }, "json");

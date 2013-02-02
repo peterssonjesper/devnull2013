@@ -3,11 +3,11 @@ body {
 }
 
 #content {
-	width: 1200px;
+	width: 1800px;
 	margin: 0 auto;
 }
 
-#starsDisplay, #planetsDisplay, #planetData {
+#starsDisplay, #planetsDisplay, #planetData, #planetDataBase {
 	box-sizing: border-box;
 	display: inline-block;
 	width: 350px;
