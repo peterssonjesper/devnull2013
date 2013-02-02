@@ -36,7 +36,7 @@
 		</div>
 
 	<!-- TEMPLATES -->
-	<script id="currentPlanet" type="plain/text">
+	<script id="regularPlanet" type="plain/text">
 		<h1>Selected Planet</h1>
 		<h2><%= planet_no %></h2>
 		<ul>
@@ -52,6 +52,23 @@
 		</ul>
 	</script>
 
+	<script id="extendedPlanet" type="plain/text">
+		<h1>Current Planet</h1>
+		<h2><%= planet_no %></h2>
+		<ul>
+			<li>Day: <%= day %></li>
+			<li>Esc Velocity: <%= esc_velocity %></li>
+			<li>Cloud Cover: <%= cloud_cover %></li>
+			<li>Radius: <%= radius %></li>
+			<li>Density: <%= density %></li>
+			<li>Type: <%= type %></li>
+			<li>X Pos: <%= x %></li>
+			<li>Y Pos: <%= y %></li>
+			<li>Surface Gravity: <%= surf_grav %></li>
+			<li>Orbit Zone: <%= orbit_zone %></li>
+		</ul>
+	</script>
+	
 	<!-- JAVASCRIPT LIB -->
 	<script src="underscore-min.js"></script>
 	<script src="map.js"></script>
