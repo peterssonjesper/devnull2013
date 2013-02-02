@@ -3,14 +3,14 @@ body {
 }
 
 #content {
-	width: 1040px;
+	width: 1200px;
 	margin: 0 auto;
 }
 
 #starsDisplay, #planetsDisplay, #planetData {
 	box-sizing: border-box;
 	display: inline-block;
-	width: 340px;
+	width: 350px;
 	padding: 0 10px;
 }
 
