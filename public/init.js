@@ -9,6 +9,7 @@ var planetcontrol = new PlanetControl();
 planetcontrol.init($("#planets"), $("#planetData"));
 
 var ship = new Ship(starMap, planetMap);
+var drone = new Drone();
 var updateInterval = 500;
 
 starMap.getMap("/stars", {},function(stars) {
@@ -73,3 +74,7 @@ function get_next_visit() {
 	return false;
 }
 planetcontrol.updateVisited();
+
+$('#planet > button').on('click', function(){
+	drone.release(ship);
+});
