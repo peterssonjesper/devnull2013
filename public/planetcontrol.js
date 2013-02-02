@@ -35,4 +35,20 @@ var PlanetControl = function() {
 			this.$content.append(_.template($('#regularPlanet').html(), planet));
 		}
 	}
+	this.updateVisited = function(){
+		$.get('/visited_planets', function(data){
+			var db = $('#planetDataBase')
+			$.each(data, function(){
+				db.find('select').append('<option value="' + this + '">' + this + '</option>');
+			});
+
+			db.find('select').on('change', function(){
+				$.get('/visited_planets/'+encodeURI($(this).val()), function(data){
+					dataContent = db.find('.data');
+					dataContent.html('').append(_.template($('#extendedPlanet').html(), data));
+				}, 'json');
+			});
+		}, "json");
+
+	}
 };
