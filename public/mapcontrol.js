@@ -9,11 +9,7 @@ var MapControl = function() {
 					name: $(this).html()
 				}),
 				dataType : 'json',
-				contentType : 'application/json; charset=utf-8',
-				success : function(data) {
-					$table.find(".selected").removeClass("selected");
-					$star.addClass("selected");
-				}
+				contentType : 'application/json; charset=utf-8'
 			});
 		});
 	};

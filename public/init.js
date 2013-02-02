@@ -4,8 +4,8 @@ var planetMap = new Map($("#planetMap"));
 var mapcontrol = new MapControl();
 var planetcontrol = new PlanetControl();
 
-var ship = new Ship(starMap);
-var updateInterval = 500;
+var ship = new Ship(starMap, planetMap);
+var updateInterval = 2000;
 
 starMap.getMap("/stars", function(stars) {
 	// Prints stars table
@@ -22,13 +22,16 @@ starMap.getMap("/stars", function(stars) {
 
 setInterval(function() {
 	planetMap.getMap("/planets", function(planets) {
-		// Prints planets table
-		printTable($("#planets"), planets, "planet_no");
-		planetcontrol.setPlanets(planets);
-
 		// Print planets on planet map
 		planetMap.clear();
 		planetMap.print(planets, "lime")
+
+		planetcontrol.setPlanets(planets);
+		// Prints planets table
+		if(planets.length > 0) {
+			planets.push({ planet_no : "edge", x : "", y : "" });
+		}
+		printTable($("#planets"), planets, "planet_no");
 	});
 }, updateInterval);
 planetcontrol.init($("#planets"), $("#planetData"));
