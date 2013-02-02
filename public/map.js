@@ -15,7 +15,7 @@ var Map = function() {
 		for(var i in stars) {
 			var star = stars[i];
 			this.printSingle(star.x, star.y, "yellow");
-			$table.append('<tr><td>' + star.name + '</td><td>' + star.x + '</td><td>' + star.y + '</td></tr>');
+			$table.append('<tr class="star"><td class="name">' + star.name + '</td><td class="xpos">' + star.x + '</td><td class="ypos">' + star.y + '</td></tr>');
 		}
 	}
 
