@@ -2,9 +2,10 @@ var Map = function($canvas) {
 
 	this.context = $canvas[0].getContext('2d');
 
-	this.getMap = function(url, callback) {
+	this.getMap = function(url, pos, callback) {
 		$.ajax({
 			url: url,
+			data: pos,
 			dataType : "json",
 		}).done(function(data) {
 			callback(data);
