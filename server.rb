@@ -71,9 +71,8 @@ get "/planets" do
 	# 2. Loop through the planets, are we on x, y?
 	#	Try to get extended planet data from DB
 	#	If it doesn't exists but we are on x, y - Do a call to object and store the data in db
-	indata = JSON.parse request.body.read
-	x = indata["x"]
-	y = indata["y"]
+	x = params["x"].to_i
+	y = params["y"].to_i
 
 	response = HTTParty.get("#{URL}?session=#{API_KEY}&command=shortrange")
 	system_data = JSON.parse(response.body)
@@ -81,13 +80,17 @@ get "/planets" do
 		planets = system_data["system"]["planetarray"]
 		result = []
 		planets.each do |planet|
-			planet_info = r.get planet.planet_no
+			puts "Lookup '#{planet["planet_no"]}'. The ship is on #{x}, #{y}. The planet is on #{planet["x"]}, #{planet["y"]}"
+			planet_info = r.get planet["planet_no"]
 			if not planet_info.nil?
-				planet_data = planet_info
-			elsif planet_info.nil? and x == planet.x and y == planet.y
-				planet_data = JSON.parse HTTParty.get("#{URL}?session=#{API_KEY}&command=object").body.read
-				r.set planet.planet_no planet_data["object_data"].to_json
+				puts "Found '#{planet["planet_no"]}' in database"
+				planet_data = JSON.parse planet_info
+			elsif planet_info.nil? and x == planet["x"] and y == planet["y"]
+				planet_data = JSON.parse HTTParty.get("#{URL}?session=#{API_KEY}&command=object").body
+				puts "Store '#{planet["planet_no"]}' in database"
+				r.set planet["planet_no"], planet_data["object_data"].to_json
 			else
+				puts "Just return '#{planet["planet_no"]}'"
 				planet_data = planet
 			end
 			result.push planet_data
