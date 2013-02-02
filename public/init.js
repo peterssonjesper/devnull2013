@@ -8,7 +8,7 @@ map.getMap(function(stars) {
 	mapcontrol.init($("#stars"));
 	setInterval(function() {
 		map.clear();
-		map.print(stars, $("table"));
+		map.print(stars);
 		ship.print_on_map();
 	}, updateInterval);
 });
