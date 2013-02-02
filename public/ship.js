@@ -4,11 +4,11 @@ var Ship = function(starMap, planetMap) {
 	var self = this;
 	this.get_position = function(callback) {
 		$.ajax({
-			url: "/ship_position",
+			url: "/ship",
 			dataType : "json",
 		}).done(function(data) {
-			self.system_x = data.system_x;
-			self.system_y = data.system_y;
+			self.system_x = data.systemx;
+			self.system_y = data.systemy;
 			callback(data);
 		});
 	};

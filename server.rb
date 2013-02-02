@@ -22,15 +22,9 @@ get "/map" do
 	File.read(File.join('public', 'map.html'))
 end
 
-get "/ship_position" do
+get "/ship" do
 	response = HTTParty.get("#{URL}?session=#{API_KEY}&command=ship&arg=show")
-	ship = JSON.parse(response.body)
-	{
-		:x => ship["unix"],
-		:y => ship["uniy"],
-		:system_x => ship["systemx"],
-		:system_y => ship["systemy"]
-	}.to_json
+	response.body
 end
 
 post "/set_direction" do
@@ -119,6 +113,34 @@ get "/visited_planets" do
 	planets.each do |planet|
 		result.push(JSON.parse(r.get planet))
 	end
-	puts result.inspect
 	result.to_json
+end
+
+post "/release_drone" do
+	x = data["x"].to_i
+	y = data["y"].to_i
+	drone_id = data["drone_id"]
+	planets = r.lrange "planets", 0, -1
+	did_release = false
+	planets.each do |planet|
+		planet = JSON.parse(r.get planet)
+		if planet["anomalies"]
+			anomaly = planet["anomalies"].first
+			uri = Addressable::URI.new
+			uri.query_values = {
+				:session => API_KEY,
+				:command => "ship",
+				:arg => "enteranomaly",
+				:arg2 => anomaly,
+				:arg3 => drone_id
+			}
+			response = HTTParty.get("#{URL}?#{uri.query}")
+			did_release = true
+			puts response.inspect
+			break
+		end
+	end
+	{
+		:isReleased => did_release
+	}.to_json
 end
