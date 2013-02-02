@@ -1,6 +1,19 @@
 body {
 	font-family: "Helvetica Neue Light", "Helvetica", sans-serif;
 }
+
+#content {
+	width: 900px;
+	margin: 0 auto;
+}
+
+#starsDisplay, #planetsDisplay, #planetData {
+	box-sizing: border-box;
+	display: inline-block;
+	width: 297px;
+	padding: 0 10px;
+}
+
 #starMap, #planetMap {
 	background-color: black;
 }
