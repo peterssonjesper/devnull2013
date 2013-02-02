@@ -5,7 +5,7 @@ require "addressable/uri"
 require "redis"
 
 URL = "https://lostinspace.lanemarknad.se:8000/api2/"
-API_KEY = "c579d00e-67e0-4587-b54e-a1cf239f9e18"
+API_KEY = "d5e7bb18-f924-4744-bb21-1059c7fe6064"
 r = Redis.new
 
 get "/stars" do
@@ -88,6 +88,7 @@ get "/planets" do
 			elsif planet_info.nil? and x == planet["x"] and y == planet["y"]
 				planet_data = JSON.parse HTTParty.get("#{URL}?session=#{API_KEY}&command=object").body
 				puts "Store '#{planet["planet_no"]}' in database"
+				r.rpush "planets", planet["planet_no"]
 				r.set planet["planet_no"], planet_data["object_data"].to_json
 			else
 				puts "Just return '#{planet["planet_no"]}'"
@@ -98,5 +99,20 @@ get "/planets" do
 		result.to_json
 	rescue
 		[].to_json
+	end
+end
+
+get "/visited_planets" do
+	planets = r.lrange "planets", 0, -1
+	planets.to_json
+end
+
+get "/visited_planets/:name" do
+	name = params[:name]
+	data = r.get name
+	if data.nil?
+		{}.to_json
+	else
+		data
 	end
 end
