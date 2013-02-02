@@ -1,6 +1,5 @@
 <html>
 	<head>
-		<script src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
 		<link rel="stylesheet" href="style.css">
 	</head>
 	<body>
@@ -38,10 +37,7 @@
 			</div>
 			<div id="planetDataBase">
 				<h1>Visited Planets</h1>
-				<select>
-					<option> </option>
-				</select>
-				<div class="data"></div>
+				<div id="visitedPlanets"></div>
 			</div>
 		</div>
 
@@ -79,8 +75,29 @@
 			<li>Orbit Zone: <%= orbit_zone %></li>
 		</ul>
 	</script>
+
+	<script id="visitedPlanetRow" type="plain/text">
+		<table>
+			<thead>
+				<th>Planet</th>
+				<th>Core radius</th>
+				<th>Surf gravity</th>
+			</thead>
+			<tbody>
+				<% $.each(planets, function() { %>
+					<tr data-name="<%= this.planet_no %>">
+						<td><%= this.planet_no %></td>
+						<td><%= this.core_radius %></td>
+						<td><%= this.surf_grav %></td>
+					</tr>
+				<% }); %>
+			</tbody>
+		</table>
+	</script>
 	
 	<!-- JAVASCRIPT LIB -->
+	<script src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
+	<script src="jquery.dataTables.min.js"></script>
 	<script src="underscore-min.js"></script>
 	<script src="map.js"></script>
 	<script src="mapcontrol.js"></script>

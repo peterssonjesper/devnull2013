@@ -9,9 +9,10 @@ body {
 
 #starsDisplay, #planetsDisplay, #planetData, #planetDataBase {
 	box-sizing: border-box;
-	display: inline-block;
+	display: block
 	width: 350px;
 	padding: 0 10px;
+	float: left;
 }
 
 #starMap, #planetMap {

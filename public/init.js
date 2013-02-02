@@ -61,8 +61,8 @@ function get_next_visit() {
 		if(name == "edge")
 			continue;
 		var already_visited = false
-		$("#planetDataBase select option").each(function() {
-			if($(this).val() === name) {
+		$("#visitedPlanets table tr").each(function() {
+			if($(this).data("name") === name) {
 				already_visited = true;
 			}
 		});

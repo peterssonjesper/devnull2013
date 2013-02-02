@@ -23,7 +23,7 @@ var PlanetControl = function() {
 		if(planet !== undefined && planet.density) {
 			this.$content.append(_.template($('#extendedPlanet').html(), planet));
 		}
-		else if(planet.day){
+		else if(planet !== undefined && planet.day){
 			this.$content.append(_.template($('#regularPlanet').html(), planet));
 		}
 	},
@@ -41,17 +41,12 @@ var PlanetControl = function() {
 	}
 	this.updateVisited = function(){
 		$.get('/visited_planets', function(data){
-			var db = $('#planetDataBase')
-			db.find('select').html("");
-			$.each(data, function(){
-				db.find('select').append('<option value="' + this + '">' + this + '</option>');
-			});
-
-			db.find('select').on('change', function(){
-				$.get('/visited_planets/'+encodeURI($(this).val()), function(data){
-					dataContent = db.find('.data');
-					dataContent.html('').append(_.template($('#extendedPlanet').html(), data));
-				}, 'json');
+			$('#visitedPlanets').html(_.template($("#visitedPlanetRow").html(), {"planets" : data}));
+			$('#visitedPlanets').find("table").dataTable({
+				"bPaginate": false,
+				"bLengthChange": false,
+				"bFilter": false,
+				"bInfo": false
 			});
 		}, "json");
 
