@@ -2,14 +2,20 @@ require 'sinatra'
 require 'json'
 require 'httparty'
 require "addressable/uri"
+require "redis"
 
 URL = "https://lostinspace.lanemarknad.se:8000/api2/"
 API_KEY = "c579d00e-67e0-4587-b54e-a1cf239f9e18"
+r = Redis.new
 
 get "/stars" do
-	response = HTTParty.get("#{URL}?session=#{API_KEY}&command=longrange")
-	data = JSON.parse(response.body)
-	data["stars"].to_json
+	stars = r.get "stars"
+	if stars.nil?
+		response = HTTParty.get("#{URL}?session=#{API_KEY}&command=longrange")
+		stars = JSON.parse(response.body)["stars"].to_json
+		r.set "stars", stars
+	end
+	stars
 end
 
 get "/map" do
@@ -60,10 +66,33 @@ post "/set_in_system_direction" do
 end
 
 get "/planets" do
+	# Indata: x, y
+	# 1. Make a shortrange call
+	# 2. Loop through the planets, are we on x, y?
+	#	Try to get extended planet data from DB
+	#	If it doesn't exists but we are on x, y - Do a call to object and store the data in db
+	indata = JSON.parse request.body.read
+	x = indata["x"]
+	y = indata["y"]
+
 	response = HTTParty.get("#{URL}?session=#{API_KEY}&command=shortrange")
 	system_data = JSON.parse(response.body)
 	begin
-		system_data["system"]["planetarray"].to_json
+		planets = system_data["system"]["planetarray"]
+		result = []
+		planets.each do |planet|
+			planet_info = r.get planet.planet_no
+			if not planet_info.nil?
+				planet_data = planet_info
+			elsif planet_info.nil? and x == planet.x and y == planet.y
+				planet_data = JSON.parse HTTParty.get("#{URL}?session=#{API_KEY}&command=object").body.read
+				r.set planet.planet_no planet_data["object_data"].to_json
+			else
+				planet_data = planet
+			end
+			result.push planet_data
+		end
+		result.to_json
 	rescue
 		[].to_json
 	end
