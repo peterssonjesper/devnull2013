@@ -76,5 +76,9 @@ function get_next_visit() {
 planetcontrol.updateVisited();
 
 $('#planet > button').on('click', function(){
-	drone.release(ship);
+	drone.release(ship, function(droneID){
+		drone.scan(droneID, function(data){
+			console.log(data);
+		});
+	});
 });
