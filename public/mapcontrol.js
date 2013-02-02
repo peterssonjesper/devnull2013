@@ -1,4 +1,4 @@
-var MapControl = function(){
+var MapControl = function() {
 	this.init = function($table){
 		$table.on("click", ".name", function(){
 			var $star = $(this).parent();
