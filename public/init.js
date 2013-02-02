@@ -10,7 +10,7 @@ planetcontrol.init($("#planets"), $("#planetData"));
 
 var ship = new Ship(starMap, planetMap);
 var drone = new Drone();
-var updateInterval = 500;
+var updateInterval = 2000;
 
 starMap.getMap("/stars", {},function(stars) {
 	// Prints stars table

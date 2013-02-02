@@ -1,7 +1,7 @@
 var Drone = function() {
 	
 	this.releaseAgain = function(ship, droneIndex){
-		if(droneIndex > ship.drones.length){
+		if(ship.drones === undefined || droneIndex > ship.drones.length){
 			return;
 		}
 		var droneReleased = false;

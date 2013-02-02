@@ -141,6 +141,20 @@ post "/release_drone" do
 		end
 	end
 	{
-		:isReleased => did_release
+		:isReleased => did_release,
+		:droneID => drone_id
 	}.to_json
+end
+
+post "/drone_scan" do
+	drone_id = data["drone_id"]
+	uri = Addressable::URI.new
+	uri.query_values = {
+		:session => API_KEY,
+		:command => "drone",
+		:arg => drone_id,
+		:arg2 => "scan"
+	}
+	response = HTTParty.get("#{URL}?#{uri.query}")
+	response.body
 end
