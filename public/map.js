@@ -11,10 +11,16 @@ var Map = function($canvas) {
 			callback(stars);
 		});
 	};
-	this.print = function(stars, $table) {
+	this.print = function(stars) {
 		for(var i in stars) {
 			var star = stars[i];
 			this.printSingle(star.x, star.y, "yellow");
+		}
+	}
+	
+	this.list = function(stars, $table) {
+		for(var i in stars) {
+			var star = stars[i];
 			$table.append('<tr class="star"><td class="name">' + star.name + '</td><td class="xpos">' + star.x + '</td><td class="ypos">' + star.y + '</td></tr>');
 		}
 	}
