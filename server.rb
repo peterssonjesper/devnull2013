@@ -77,37 +77,33 @@ get "/planets" do
 	response = HTTParty.get("#{URL}?session=#{API_KEY}&command=shortrange")
 	system_data = JSON.parse(response.body)
 	reached_planet = false
-#	begin
-		planets = system_data["system"]["planetarray"]
-		result = []
-		planets.each do |planet|
-			puts "Lookup '#{planet["planet_no"]}'. The ship is on #{x}, #{y}. The planet is on #{planet["x"]}, #{planet["y"]}"
-			planet_info = r.get planet["planet_no"]
-			if not planet_info.nil?
-				puts "Found '#{planet["planet_no"]}' in database"
-				planet_data = JSON.parse planet_info
-			elsif planet_info.nil? and x == planet["x"] and y == planet["y"]
-				planet_data = JSON.parse HTTParty.get("#{URL}?session=#{API_KEY}&command=object").body
-				puts "Store '#{planet["planet_no"]}' in database"
-				json_data = planet_data["object_data"].to_json
-				if(json_data != "null") {
-					r.rpush "planets", planet["planet_no"]
-					r.set planet["planet_no"], planet_data["object_data"].to_json
-					reached_planet = true
-				}
-			else
-				puts "Just return '#{planet["planet_no"]}'"
-				planet_data = planet
+	planets = system_data["system"]["planetarray"]
+	result = []
+	planets.each do |planet|
+		puts "Lookup '#{planet["planet_no"]}'. The ship is on #{x}, #{y}. The planet is on #{planet["x"]}, #{planet["y"]}"
+		planet_info = r.get planet["planet_no"]
+		if not planet_info.nil?
+			puts "Found '#{planet["planet_no"]}' in database"
+			planet_data = JSON.parse planet_info
+		elsif planet_info.nil? and x == planet["x"] and y == planet["y"]
+			planet_data = JSON.parse HTTParty.get("#{URL}?session=#{API_KEY}&command=object").body
+			puts "Store '#{planet["planet_no"]}' in database"
+			json_data = planet_data["object_data"].to_json
+			if json_data != "null"
+				r.rpush "planets", planet["planet_no"]
+				r.set planet["planet_no"], planet_data["object_data"].to_json
+				reached_planet = true
 			end
-			result.push planet_data
+		else
+			puts "Just return '#{planet["planet_no"]}'"
+			planet_data = planet
 		end
-		{
-			:reachedPlanet => reachedPlanet,
-			:planets => result
-		}.to_json
-	#rescue
-#		[].to_json
-#	end
+		result.push planet_data
+	end
+	{
+		:reachedPlanet => reached_planet,
+		:planets => result
+	}.to_json
 end
 
 get "/visited_planets" do

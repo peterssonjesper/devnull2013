@@ -25,7 +25,12 @@ starMap.getMap("/stars", {},function(stars) {
 });
 
 setInterval(function() {
-	planetMap.getMap("/planets", {x: ship.system_x, y: ship.system_y},function(planets) {
+	planetMap.getMap("/planets", {x: ship.system_x, y: ship.system_y},function(data) {
+		//Check if ship has reached a planet
+		if(data.reachedPlanet === true) {
+			planetcontrol.updateVisited();
+		}
+		var planets = data.planets;
 		planetcontrol.setPlanets(planets);
 		planetcontrol.drawPlanetDetails(planets);
 
@@ -43,7 +48,8 @@ setInterval(function() {
 
 setInterval(function() {
 	var name = get_next_visit();
-	if(name)
+	var autoPilotEnabled = $("#autopilot").is(":checked")
+	if(name && autoPilotEnabled)
 		planetcontrol.go_to_planet(name);
 }, updateInterval*2);
 
@@ -66,17 +72,4 @@ function get_next_visit() {
 	}
 	return false;
 }
-
-$.get('/visited_planets', function(data){
-	var db = $('#planetDataBase')
-	$.each(data, function(){
-		db.find('select').append('<option value="' + this + '">' + this + '</option>');
-	});
-
-	db.find('select').on('change', function(){
-		$.get('/visited_planets/'+encodeURI($(this).val()), function(data){
-			dataContent = db.find('.data');
-			dataContent.html('').append(_.template($('#extendedPlanet').html(), data));
-		}, 'json');
-	});
-}, "json");
+planetcontrol.updateVisited();
