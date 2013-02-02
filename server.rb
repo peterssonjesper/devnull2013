@@ -13,3 +13,8 @@ end
 get "/map" do
 	File.read(File.join('public', 'map.html'))
 end
+
+get "/ship_position" do
+	response = HTTParty.get("#{URL}?session=#{API_KEY}&command=ship&arg=show")
+	response.body
+end
