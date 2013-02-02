@@ -1,5 +1,11 @@
-var Drone = function() {
+var Drone = function(map) {
+
+	this.droneMap = map;
 	
+	this.print_on_map = function(data){
+		this.droneMap.printAtom(data.x, data.y, "orange"); 
+	};
+
 	this.releaseAgain = function(ship, droneIndex, callback) {
 		console.log(droneIndex);
 		if(ship.ship_data.drones === undefined || droneIndex > ship.ship_data.drones.length-1) {

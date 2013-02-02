@@ -1,5 +1,6 @@
 var starMap = new Map($("#starMap"));
 var planetMap = new Map($("#planetMap"));
+var droneMap = new Map($("#map"));
 
 var planetTable = new Table($("#planets"), "planet_no");
 var starTable = new Table($("#stars"), "name");
@@ -9,7 +10,7 @@ var planetcontrol = new PlanetControl();
 planetcontrol.init($("#planets"), $("#planetData"));
 
 var ship = new Ship(starMap, planetMap);
-var drone = new Drone();
+var drone = new Drone(droneMap);
 var updateInterval = 2000;
 
 starMap.getMap("/stars", {},function(stars) {
@@ -26,7 +27,7 @@ starMap.getMap("/stars", {},function(stars) {
 });
 
 setInterval(function() {
-	planetMap.getMap("/planets", {x: ship.system_x, y: ship.system_y},function(data) {
+	planetMap.getMap("/planets", {x: ship.ship_data.systemx, y: ship.ship_data.systemy},function(data) {
 		//Check if ship has reached a planet
 		if(data.reachedPlanet === true) {
 			planetcontrol.updateVisited();
@@ -79,6 +80,7 @@ $('#planet > button').on('click', function(){
 	drone.release(ship, function(droneID){
 		drone.scan(droneID, function(data){
 			console.log(data);
+			drone.print_on_map(data);			
 		});
 	});
 });

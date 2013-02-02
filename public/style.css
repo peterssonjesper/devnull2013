@@ -15,7 +15,7 @@ body {
 	float: left;
 }
 
-#starMap, #planetMap {
+#starMap, #planetMap, #map {
 	background-color: black;
 }
 table {
