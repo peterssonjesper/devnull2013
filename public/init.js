@@ -41,6 +41,32 @@ setInterval(function() {
 	});
 }, updateInterval);
 
+setInterval(function() {
+	var name = get_next_visit();
+	if(name)
+		planetcontrol.go_to_planet(name);
+}, updateInterval*2);
+
+function get_next_visit() {
+	planets = $("#planets").find("tbody tr");
+	for(var i=0; i < planets.length; ++i) {
+		planet = $(planets[i]);
+		var name = planet.find("td.name").html();
+		if(name == "edge")
+			continue;
+		var already_visited = false
+		$("#planetDataBase select option").each(function() {
+			if($(this).val() === name) {
+				already_visited = true;
+			}
+		});
+		if(already_visited === false) {
+			return name;
+		}
+	}
+	return false;
+}
+
 $.get('/visited_planets', function(data){
 	var db = $('#planetDataBase')
 	$.each(data, function(){

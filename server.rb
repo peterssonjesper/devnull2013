@@ -76,7 +76,8 @@ get "/planets" do
 
 	response = HTTParty.get("#{URL}?session=#{API_KEY}&command=shortrange")
 	system_data = JSON.parse(response.body)
-	begin
+	reached_planet = false
+#	begin
 		planets = system_data["system"]["planetarray"]
 		result = []
 		planets.each do |planet|
@@ -88,18 +89,25 @@ get "/planets" do
 			elsif planet_info.nil? and x == planet["x"] and y == planet["y"]
 				planet_data = JSON.parse HTTParty.get("#{URL}?session=#{API_KEY}&command=object").body
 				puts "Store '#{planet["planet_no"]}' in database"
-				r.rpush "planets", planet["planet_no"]
-				r.set planet["planet_no"], planet_data["object_data"].to_json
+				json_data = planet_data["object_data"].to_json
+				if(json_data != "null") {
+					r.rpush "planets", planet["planet_no"]
+					r.set planet["planet_no"], planet_data["object_data"].to_json
+					reached_planet = true
+				}
 			else
 				puts "Just return '#{planet["planet_no"]}'"
 				planet_data = planet
 			end
 			result.push planet_data
 		end
-		result.to_json
-	rescue
-		[].to_json
-	end
+		{
+			:reachedPlanet => reachedPlanet,
+			:planets => result
+		}.to_json
+	#rescue
+#		[].to_json
+#	end
 end
 
 get "/visited_planets" do
@@ -108,8 +116,7 @@ get "/visited_planets" do
 end
 
 get "/visited_planets/:name" do
-	name = params[:name]
-	data = r.get name
+	data = r.get params[:name]
 	if data.nil?
 		{}.to_json
 	else

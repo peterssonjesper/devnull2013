@@ -8,15 +8,7 @@ var PlanetControl = function() {
 			var $planet = $(this);
 			var index = $(this).data('index');
 			self.current_index = index;
-			$.ajax({
-				url : '/set_in_system_direction',
-				type : 'POST',
-				data: JSON.stringify({
-					name: $planet.find(".name").html()
-				}),
-				dataType : 'json',
-				contentType : 'application/json; charset=utf-8'
-			});
+			self.go_to_planet($planet.find(".name").html());
 		});
 	}
 	this.setPlanets = function(planets) {
@@ -34,5 +26,17 @@ var PlanetControl = function() {
 		else if(planet.day){
 			this.$content.append(_.template($('#regularPlanet').html(), planet));
 		}
+	},
+	this.go_to_planet = function(name) {
+		console.log("Will travel to planet " + name);
+		$.ajax({
+			url : '/set_in_system_direction',
+			type : 'POST',
+			data: JSON.stringify({
+				name: name
+			}),
+			dataType : 'json',
+			contentType : 'application/json; charset=utf-8'
+		});
 	}
 };
