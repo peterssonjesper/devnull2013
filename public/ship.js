@@ -10,8 +10,9 @@ var Ship = function(map) {
 	};
 
 	this.print_on_map = function() {
+		var self = this;
 		ship.get_position(function(position) {
-			this.map.printSingle(position.x, position.y, "red");
+			self.map.printAtom(position.x, position.y, "red");
 		});
 	}
 };

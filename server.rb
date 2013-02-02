@@ -8,7 +8,8 @@ API_KEY = "c579d00e-67e0-4587-b54e-a1cf239f9e18"
 
 get "/stars" do
 	response = HTTParty.get("#{URL}?session=#{API_KEY}&command=longrange")
-	response.body
+	data = JSON.parse(response.body)
+	data["stars"].to_json
 end
 
 get "/map" do

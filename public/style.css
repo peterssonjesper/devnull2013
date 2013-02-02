@@ -1,7 +1,7 @@
 body {
 	font-family: "Helvetica Neue Light", "Helvetica", sans-serif;
 }
-#map {
+#starMap, #planetMap {
 	background-color: black;
 }
 table {

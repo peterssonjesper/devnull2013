@@ -2,30 +2,23 @@ var Map = function($canvas) {
 
 	this.context = $canvas[0].getContext('2d');
 
-	this.getMap = function(callback) {
+	this.getMap = function(url, callback) {
 		$.ajax({
-			url: "/stars",
+			url: url,
 			dataType : "json",
 		}).done(function(data) {
-			var stars = data["stars"];
-			callback(stars);
+			callback(data);
 		});
 	};
-	this.print = function(stars) {
-		for(var i in stars) {
-			var star = stars[i];
-			this.printSingle(star.x, star.y, "yellow");
-		}
-	}
-	
-	this.list = function(stars, $table) {
-		for(var i in stars) {
-			var star = stars[i];
-			$table.append('<tr class="star"><td class="name">' + star.name + '</td><td class="xpos">' + star.x + '</td><td class="ypos">' + star.y + '</td></tr>');
+
+	this.print = function(atoms, color) {
+		for(var i in atoms) {
+			var atom = atoms[i];
+			this.printAtom(atom.x, atom.y, color);
 		}
 	}
 
-	this.printSingle = function(x, y, color) {
+	this.printAtom = function(x, y, color) {
 		this.context.beginPath();
 		this.context.arc(x, y, 3, 0, 2*Math.PI, false);
 		this.context.fillStyle = color;
@@ -37,4 +30,3 @@ var Map = function($canvas) {
 	}
 
 };
-
